@@ -3,13 +3,13 @@ package com.testsigma.tasks;
 import com.testsigma.model.ProvisioningProfile;
 import com.testsigma.model.Upload;
 import com.testsigma.model.UploadType;
-import com.testsigma.model.UploadVersion;
-import com.testsigma.service.*;
+import com.testsigma.service.ProvisioningProfileService;
+import com.testsigma.service.ProvisioningProfileUploadService;
+import com.testsigma.service.ResignService;
+import com.testsigma.service.UploadService;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.List;
 
 @Log4j2
 @Data
@@ -19,23 +19,23 @@ public class ReSignTask implements Runnable {
   private final ProvisioningProfileService provisioningProfileService;
   private final ResignService resignService;
   private final ProvisioningProfile profile;
-  private final UploadVersionService uploadVersionService;
-  private final UploadVersion uploadVersion;
+  private final UploadService uploadService;
+  private final Upload upload;
 
   public ReSignTask(WebApplicationContext webApplicationContext,
-                    ProvisioningProfile profile, UploadVersion uploadVersion) {
+                    ProvisioningProfile profile, Upload upload) {
     super();
     this.webApplicationContext = webApplicationContext;
     this.profile = profile;
-    this.uploadVersion = uploadVersion;
+    this.upload = upload;
     this.profileUploadService = webApplicationContext.getBean(ProvisioningProfileUploadService.class);
     this.resignService = webApplicationContext.getBean(ResignService.class);
-    this.uploadVersionService = webApplicationContext.getBean(UploadVersionService.class);
+    this.uploadService = webApplicationContext.getBean(UploadService.class);
     this.provisioningProfileService = webApplicationContext.getBean(ProvisioningProfileService.class);
   }
 
   public void run() {
-    if (uploadVersion != null) {
+    if (upload != null) {
       resignUploadForAllProfiles();
     } else {
       resignAllUploads();
@@ -48,7 +48,7 @@ public class ReSignTask implements Runnable {
         profile.getName()));
       resignService.reSignWda(profile);
       resignService.reSignAllUploads(profile,
-              uploadVersionService.findValidUploadsByUploadTypesIn(List.of(UploadType.IPA)));
+        uploadService.findAllByType(UploadType.IPA));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
@@ -56,13 +56,13 @@ public class ReSignTask implements Runnable {
 
   private void resignUploadForAllProfiles() {
     try {
-      resignService.reSignForAllProfiles(uploadVersion, provisioningProfileService.findAll());
+      resignService.reSignForAllProfiles(upload, provisioningProfileService.findAll());
     } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
   }
 
   public Long getId() {
-    return (uploadVersion != null) ? uploadVersion.getId() : profile.getId();
+    return (upload != null) ? upload.getId() : profile.getId();
   }
 }

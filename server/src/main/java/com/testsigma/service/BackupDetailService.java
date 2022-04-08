@@ -55,7 +55,6 @@ public class BackupDetailService extends XMLExportService<BackupDetail> {
   private final WorkspaceVersionService versionService;
   private final ElementScreenService elementScreenService;
   private final UploadService uploadService;
-  private final UploadVersionService uploadVersionService;
   private final BackupDetailMapper exportBackupEntityMapper;
 
   public BackupDetail find(Long id) throws ResourceNotFoundException {
@@ -125,7 +124,6 @@ public class BackupDetailService extends XMLExportService<BackupDetail> {
         attachmentService.export(backupDTO);
         agentService.export(backupDTO);
         uploadService.export(backupDTO);
-        uploadVersionService.export(backupDTO);
         testcaseService.export(backupDTO);
         teststepService.export(backupDTO);
         reststepService.export(backupDTO);

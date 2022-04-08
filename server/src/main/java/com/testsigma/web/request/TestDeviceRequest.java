@@ -31,7 +31,7 @@ public class TestDeviceRequest {
   TestDeviceSettings settings;
   String browser;
   String udid;
-  Long appUploadVersionId;
+  String appUploadId;
   String appPackage;
   String appActivity;
   String appUrl;

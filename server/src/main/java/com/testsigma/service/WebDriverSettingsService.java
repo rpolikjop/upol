@@ -49,16 +49,10 @@ public class WebDriverSettingsService {
     }
 
     testDevice.setAppPathType(mobileInspection.getApplicationPathType());
-    if(mobileInspection.getUploadVersionId()!=null) {
-      testDevice.setAppUploadId(mobileInspection.getUploadVersion().getUploadId());
-      testDevice.setAppUploadVersionId(mobileInspection.getUploadVersionId());
-    }
-    else {
-      testDevice.setAppActivity(mobileInspection.getAppActivity());
-      testDevice.setAppPackage(mobileInspection.getApplicationPackage());
-    }
-    if(mobileInspection.getBundleId()!=null)
-      testDevice.setAppBundleId(mobileInspection.getBundleId());
+    testDevice.setAppUploadId(mobileInspection.getAppUploadId());
+    testDevice.setAppPackage(mobileInspection.getApplicationPackage());
+    testDevice.setAppActivity(mobileInspection.getAppActivity());
+    testDevice.setAppBundleId(mobileInspection.getBundleId());
     testDevice.setUdid(String.valueOf(webDriverSettingsRequest.getUniqueId()));
     testDevice.setDeviceId(mobileInspection.getAgentDeviceId());
 

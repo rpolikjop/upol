@@ -11,11 +11,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -26,48 +25,63 @@ import java.util.Set;
 @ToString
 @EqualsAndHashCode
 public class Upload {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "workspace_id")
-    private Long workspaceId;
+  @Column(name = "workspace_id")
+  private Long workspaceId;
 
-    @Column(name = "name")
-    private String name;
+  @Column(name = "name")
+  private String name;
 
-    @Column(name = "latest_version_id")
-    private Long latestVersionId;
+  @Column(name = "path")
+  private String appPath;
 
-    @Column(name = "created_date")
-    @CreationTimestamp
-    private Timestamp createdDate;
+  @Column(name = "file_name")
+  private String fileName;
 
-    @Column(name = "updated_date")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
+  @Column(name = "type")
+  @Enumerated(EnumType.STRING)
+  private UploadType type;
 
-    @Transient
-    private String preSignedURL;
+  @Column(name = "version")
+  private String version;
 
-    @OneToMany(mappedBy = "upload", fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Set<ProvisioningProfileUpload> provisioningProfileUploads;
+  @Column(name = "file_size")
+  private Integer fileSize;
+
+  @Column(name = "created_date")
+  @CreationTimestamp
+  private Timestamp createdDate;
+
+  @Column(name = "updated_date")
+  @UpdateTimestamp
+  private Timestamp updatedDate;
+
+  @Column(name = "upload_status")
+  @Enumerated(EnumType.STRING)
+  private UploadStatus uploadStatus;
+
+  @Transient
+  private String preSignedURL;
+
+  @OneToMany(mappedBy = "upload", fetch = FetchType.LAZY)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private Set<ProvisioningProfileUpload> provisioningProfileUploads;
 
 
-    @OneToOne
-    @JoinColumn(name = "latest_version_id", insertable = false, updatable = false)
-    @NotFound(action = NotFoundAction.IGNORE)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private UploadVersion latestVersion;
+  public String getResignedAppS3PathSuffix(Long provisioningProfileId) {
+    return "uploads/resigned/" + getId() + "/"
+      + provisioningProfileId + "/" + getUploadFileName();
+  }
 
+  private String getUploadFileName() {
+    if (StringUtils.isNotBlank(this.getFileName())) {
+      return this.getFileName();
+    }
+    return Paths.get(this.getAppPath()).toFile().getName();
+  }
 
-    @ManyToOne
-    @Fetch(value = FetchMode.SELECT)
-    @JoinColumn(name = "workspace_id", referencedColumnName = "id", insertable = false, updatable = false)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Workspace workspace;
 }

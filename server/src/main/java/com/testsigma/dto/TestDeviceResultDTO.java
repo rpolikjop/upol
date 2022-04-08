@@ -45,6 +45,5 @@ public class TestDeviceResultDTO {
   private Long reRunParentId;
   private Timestamp createdDate;
   private Timestamp updatedDate;
-  private Long appUploadVersionId;
 
 }

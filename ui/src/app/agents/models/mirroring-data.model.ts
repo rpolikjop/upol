@@ -21,7 +21,6 @@ export class MirroringData {
   recording: boolean;
   upload: Upload;
   uploadId: number;
-  uploadVersionId: number;
   workspaceVersionId: number;
   workspaceVersion: WorkspaceVersion;
   app_activity: String;

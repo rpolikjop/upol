@@ -311,7 +311,6 @@ export class MobileRecordingComponent extends BaseComponent implements OnInit {
       }
     } else {
       mobileInspection.appUploadId = this.data.uploadId;
-      mobileInspection.uploadVersionId = this.data.uploadVersionId;
       mobileInspection.applicationPathType = ApplicationPathType.UPLOADS;
     }
     return mobileInspection;

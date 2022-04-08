@@ -9,6 +9,8 @@
 
 package com.testsigma.dto;
 
+import com.testsigma.model.UploadStatus;
+import com.testsigma.model.UploadType;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -19,5 +21,12 @@ public class UploadDTO {
   Timestamp createdDate;
   Timestamp updatedDate;
   String name;
-  Long latestVersionId;
+  String appPath;
+  String fileName;
+  UploadType type;
+  String version;
+  Integer fileSize;
+  String preSignedURL;
+  Boolean signed = Boolean.FALSE;
+  UploadStatus uploadStatus;
 }

@@ -92,8 +92,6 @@ import {RestStepHeadersComponent} from "../components/webcomponents/rest-step-he
 import {PromptModalComponent} from "./components/webcomponents/prompt-modal.component";
 import {ToastrModule} from "ngx-toastr";
 import {SortDirective} from "./directives/sort.directive";
-import {UploadVersion} from "./models/upload-version.model";
-import {UploadVersionService} from "./services/upload-version.service";
 
 @NgModule({
     declarations: [
@@ -151,7 +149,6 @@ import {UploadVersionService} from "./services/upload-version.service";
     UrlConstantsService,
     AuthenticationGuard,
     UploadService,
-    UploadVersionService,
     ElementService,
     NotificationsService,
     TranslateService,
@@ -269,7 +266,7 @@ export class SharedModule {
       providers: [
         RequestCache,
         {provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true},
-        SessionService, UrlConstantsService, HttpHeadersService, AuthenticationGuard, UploadService,UploadVersionService,
+        SessionService, UrlConstantsService, HttpHeadersService, AuthenticationGuard, UploadService,
         ElementService, NotificationsService, TranslateService, TestDeviceResultService, TestsigmaOsConfigService
       ]
     };
